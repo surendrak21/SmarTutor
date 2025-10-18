@@ -1,0 +1,115 @@
+/* Uncomment if .flex-container is being used, and adjust as needed. */
+.flex-container {
+  flex-direction: row;
+  height: 100vh;
+  background-color: rgb(241, 198, 175);
+}
+ 
+
+.calendar tr {
+    background-color: rgb(242, 204, 214);
+    color: aquamarine;
+  }
+  
+  .calendar tr th {
+    background-color: rgb(113, 167, 218);
+    color: rgb(6, 6, 6);
+  }
+  
+ 
+  .course-search {
+    margin-bottom: 20px;
+  }
+  
+  .course-search input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  
+  .course-search div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f9f5f5;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    font-size: 16px;
+    
+  }
+  
+  .course-search button {
+    padding: 5px 15px;
+    background-color: #7ed40d;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+  }
+  
+  .course-search button:hover {
+    background-color: #0056b3;
+  }
+  
+  .selected-courses table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .selected-courses th, .selected-courses td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .selected-courses th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .selected-courses button {
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .selected-courses button:hover {
+    background-color: #c82333;
+  }
+  
+  .calendar {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  .calendar th, .calendar td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .calendar th {
+    background-color: #92a728;
+    color: white;
+  }
+  .timetable-cell {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+  }
+  
+  .highlighted {
+    background-color: lightgreen;
+  }
+  .conflicted {
+    background-color: red;
+    color: white; /* Optionally change text color to improve readability */
+}
