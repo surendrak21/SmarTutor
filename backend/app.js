@@ -1,32 +1,32 @@
-// backend/app.js
 require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-
 const app = express();
 
-require('./db/conn');                 // 1) connect Mongo FIRST
+require('./db/conn');                // connect to Mongo
 
-// 2) core middlewares – MUST come before routes
-app.use(express.json());
-app.use(cookieParser());
+// parsers FIRST
+app.use(express.json());             // parse JSON body
+app.use(cookieParser());             // cookies
+
+// CORS for React dev server with cookies
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: 'http://localhost:3000',
   credentials: true,
 }));
 
-// 3) routes – AFTER middlewares
-app.use(require('./router/auth'));     // auth routes
-app.use(require('./router/prereg'));   // prereg routes (needs cookieParser)
+// routes AFTER parsers
+app.use(require('./router/auth'));
+app.use(require('./router/prereg'));
 
-// (optional) health
+const PORT = process.env.PORT || 5000;
+
 app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`server is running at port ${PORT}`);
 });

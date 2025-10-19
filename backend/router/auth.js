@@ -1,4 +1,3 @@
-// backend/router/auth.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
@@ -7,8 +6,8 @@ require("../db/conn");
 const authenticate = require("../middleware/authenticate");
 const User = require("../model/UserSchema");
 
-// Protected: return current user
-router.get("/", authenticate, (req, res) => res.status(200).json(req.rootUser));
+// quick "who am I"
+router.get("/me", authenticate, (req, res) => res.status(200).json(req.rootUser));
 
 // Example protected endpoint
 router.get("/announcement", authenticate, (req, res) => res.json(req.rootUser));
@@ -49,9 +48,10 @@ router.post("/login", async (req, res) => {
     const token = await user.generateAuthToken();
     res.cookie("jwtoken", token, {
       httpOnly: true,
-      expires: new Date(Date.now() + 25892000000),
+      expires: new Date(Date.now() + 25892000000), // ~300 days
       sameSite: "lax",
-      // secure: true, // use under HTTPS
+      // secure: true, // enable on HTTPS
+      path: "/"
     });
     return res.json({ message: "Login successfully" });
   } catch (err) {
@@ -60,13 +60,13 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Logout
+// Logout (POST!)
 router.post("/logout", (req, res) => {
   res.clearCookie("jwtoken", { path: "/" });
   return res.status(200).send("user logout");
 });
 
-// Other protected routes you had
+// Protected pings you were using
 router.get("/preregistration", authenticate, (req, res) => res.json(req.rootUser));
 router.get("/courseclash", authenticate, (req, res) => res.json(req.rootUser));
 router.get("/courses", authenticate, (req, res) => res.json(req.rootUser));
