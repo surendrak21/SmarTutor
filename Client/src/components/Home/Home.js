@@ -85,14 +85,12 @@ const Home = () => {
         </div>
         <div className="st-team__grid">
           {[
-            ["Ch Hemanth Kumar", "210277", "chandaka21@iitk.ac.in"],
+            
+            ["Surendra Kumar", "211083", "surendrak21@iitk.ac.in"],
             ["Kantule Ritesh Ramdas", "210488", "kantulerr21@iitk.ac.in"],
-            ["Rishit Bhutra", "210857", "rishitb21@iitk.ac.in"],
             ["Sarthak Paswan", "220976", "sarthakp22@iitk.ac.in"],
             ["Saurav Kumar", "210950", "sauravk21@iitk.ac.in"],
             ["Sonu Kumar", "211052", "sonuk21@iitk.ac.in"],
-            ["Surendra Kumar Ahirwar", "211083", "surendrak21@iitk.ac.in"],
-            ["Krishna Chandu", "220832", "pkrishna22@iitk.ac.in"],
             ["Yash Gothwal", "211189", "yashg21@iitk.ac.in"],
           ].map(([name, roll, mail]) => (
             <div className="st-team__card" key={roll}>
@@ -107,17 +105,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="st-footer">
-        <div className="container st-footer__inner">
-          <p>© {new Date().getFullYear()} SmartTutor. Made with ♥ for IITK students.</p>
-          <div className="st-footer__links">
-            <Link to="/courses">Courses</Link>
-            <Link to="/preregistration">PreRegistration</Link>
-            <Link to="/announcement">Announcement</Link>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

@@ -20,10 +20,10 @@
 /* Hero */
 .st-hero {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 40px;
+  grid-template-columns: 1.2fr 0.0fr;
+  gap: 0px;
   align-items: center;
-  padding: 56px 0 24px;
+  padding: 0px 0 0px;
 }
 
 .st-badge {
@@ -31,43 +31,45 @@
   background: rgba(167, 139, 250, 0.15);
   color: #6d28d9;
   border: 1px solid rgba(167, 139, 250, 0.35);
-  padding: 6px 10px;
+  padding: 0px 0px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
-  margin-bottom: 12px;
+  margin-bottom: 0px;
 }
 
 .st-hero h1 {
-  font-size: clamp(28px, 4vw, 44px);
+  font-size: clamp(20px, 4vw, 28px);
   line-height: 1.1;
-  margin: 6px 0 12px;
+  margin: px 0 px;
+  text-align: center;
 }
 
 .st-hero__sub {
   color: var(--muted);
   font-size: 16px;
-  max-width: 50ch;
+  max-width: 200ch;
+  text-align: center;
 }
 
 .st-cta {
   display: flex;
   gap: 12px;
-  margin: 22px 0 12px;
+  margin: 0px 0 0px;
 }
 
 .st-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 18px;
+  padding: 1px 18px;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
   background: var(--card);
   color: var(--ink);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
 }
 .st-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(2,6,23,.07); }

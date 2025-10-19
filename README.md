@@ -26,7 +26,7 @@ npm or yarn
 
 Installation
 1️⃣ Clone the repository
-git clone https://github.com/<your-username>/SmartTutor.git
+git clone https://github.com/surendrak21/SmartTutor.git
 cd SmartTutor
 
 2️⃣ Backend Setup
@@ -38,7 +38,7 @@ Create a .env file in the backend directory:
 
 PORT=5000
 MONGODB_URI=mongodb://127.0.0.1:27017/smarttutor
-SECRET_KEY=your_secret_key
+SECRET_KEY= 000000
 
 
 Run backend:
