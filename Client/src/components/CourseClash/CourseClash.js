@@ -18,14 +18,13 @@ const CourseClash = () => {
        const data = await res.json();
        console.log(data);
        setUserData(data);
-       // ...
-       // ✅ CORRECT LOGIC: Check if the HTTP status is NOT in the 200-299 range
+      
        if (!res.ok) { 
-         const data = await res.json(); // Error body parse karein
+         const data = await res.json(); // Error body parse
          const error = new Error(data.error || res.statusText || 'Fetch failed');
          throw error;
        }
-// ...
+
 
     }catch(err){
          console.log(err);

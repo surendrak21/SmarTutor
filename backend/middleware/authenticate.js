@@ -4,19 +4,19 @@ const User = require("../model/UserSchema");
 
 const authenticate = async (req, res, next) => {
   try {
-    const token = req.cookies?.jwtoken;
+    const token = req.cookies.jwtoken;
     if (!token) {
       return res.status(401).json({ error: "Unauthorized: No token provided" });
     }
 
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const verifyToken = jwt.verify(token, process.env.SECRET_KEY);
     const rootUser = await User.findOne({
-      _id: decoded._id,
+      _id: verifyToken._id,
       "tokens.token": token,
     });
 
     if (!rootUser) {
-      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+      return res.status(401).json({ error: "Unauthorized: User not found" });
     }
 
     req.token = token;
@@ -24,8 +24,10 @@ const authenticate = async (req, res, next) => {
     req.userID = rootUser._id;
     next();
   } catch (err) {
-    console.error("Auth error:", err.message);
-    return res.status(401).json({ error: "Unauthorized" });
+    console.log("auth middleware error", err.message);
+    return res
+      .status(401)
+      .json({ error: "Unauthorized: Token invalid or expired" });
   }
 };
 

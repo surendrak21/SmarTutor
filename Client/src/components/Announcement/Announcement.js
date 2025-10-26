@@ -38,11 +38,6 @@ const seed = [
   },
 ];
 
-/**
- * If/when you connect real backend:
- *  - replace `seed` with fetched data
- *  - keep the same shape {id,title,body,date,tags[],pinned}
- */
 
 export default function Announcement() {
   const [query, setQuery] = useState("");

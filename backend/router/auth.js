@@ -66,7 +66,7 @@ router.post("/logout", (req, res) => {
   return res.status(200).send("user logout");
 });
 
-// Protected pings you were using
+// Protected pings 
 router.get("/preregistration", authenticate, (req, res) => res.json(req.rootUser));
 router.get("/courseclash", authenticate, (req, res) => res.json(req.rootUser));
 router.get("/courses", authenticate, (req, res) => res.json(req.rootUser));

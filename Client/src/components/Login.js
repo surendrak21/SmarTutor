@@ -1,3 +1,4 @@
+// Client/src/components/Login.js
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
@@ -15,7 +16,7 @@ const Login = () => {
       const res = await fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        credentials: "include", // important so cookie is set
         body: JSON.stringify({ email, password }),
       });
 
@@ -27,9 +28,9 @@ const Login = () => {
         return;
       }
 
-      // success
+      // login success
       dispatch({ type: "USER", payload: true });
-      window.alert("Login Successful");
+      // window.alert("Login Successful");
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Login error:", err);

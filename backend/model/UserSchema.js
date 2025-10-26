@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, trim: true, lowercase: true, unique: true },
     phone: { type: Number, required: true },
     password: { type: String, required: true, minlength: 6 },
-    cpassword: { type: String, required: true, minlength: 6 }, // normally not stored, but keeping to match your app
+    cpassword: { type: String, required: true, minlength: 6 }, 
     tokens: [{ token: { type: String, required: true } }],
     // NEW: user’s pre-registration selection (courseId list)
     selectedCourses: { type: [String], default: [] },

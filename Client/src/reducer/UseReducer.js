@@ -1,9 +1,13 @@
-export const initialState =null;
+// Client/src/reducer/UseReducer.js
 
+// isAuthenticated: true/false
+export const initialState = false;
 
-export const reducer =(state,action)=>{
-    if(action.type === "USER"){
-        return action.payload;
-    }
-    return state;
-}
+export const reducer = (state, action) => {
+  switch (action.type) {
+    case "USER":
+     return action.payload;
+    default:
+      return state;
+  }
+};

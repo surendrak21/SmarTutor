@@ -12,7 +12,7 @@ const DAY_LABEL = {
   SN: "Sunday",
 };
 
-// helper: 7..18 labels
+
 function emptyTimetable() {
   const t = {};
   for (let hour = 7; hour <= 18; hour++) {
@@ -31,7 +31,7 @@ function emptyTimetable() {
   return t;
 }
 
-// parse all day tokens without eating the time
+
 // IMPORTANT: keep Th, SA, SN before single-letter days to avoid T catching "Th"
 function parseDays(str) {
   const re = /(Th|SA|SN|M|T|W|F)\b/g;

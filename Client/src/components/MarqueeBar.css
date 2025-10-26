@@ -1,0 +1,79 @@
+/* Outer shell: fixed bottom strip */
+.marquee-wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: #111827; /* dark navy / dashboard vibe */
+  color: #ffffff;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.8);
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 9999;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding-left: 0; /* we manage padding on inner */
+  padding-right: 0;
+}
+
+/* Centers the scrolling track inside a max-width container */
+.marquee-inner {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+
+/* This is the long moving line */
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%; /* start off-screen to the right */
+  animation: marquee-scroll 35s linear infinite;
+}
+
+/* Each message chunk */
+.marquee-text {
+  display: inline-block;
+  padding: 0 1rem;
+  color: #f9fafb;
+  font-weight: 500;
+}
+
+/* Small highlight styling in messages if you add <strong> etc. */
+.marquee-text strong {
+  color: #a78bfa; /* soft purple */
+  font-weight: 600;
+}
+
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .marquee-wrapper {
+    font-size: 0.7rem;
+    height: 32px;
+  }
+
+  .marquee-text {
+    padding: 0 0.75rem;
+  }
+}

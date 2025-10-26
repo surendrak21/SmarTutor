@@ -1,25 +1,29 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
+  "short_name": "SmartTutor",
+  "name": "SmartTutor - IITK Course Pre-Registration Portal",
+  "description": "A modern web app that helps IIT Kanpur students pre-register courses, manage timetables, and view announcements easily.",
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#7C3AED",
+  "background_color": "#FFFFFF",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": ["education", "productivity", "student", "portal"],
+  "shortcuts": [
+    {
+      "name": "Pre-Registration",
+      "url": "/preregistration",
+      "description": "Access your course registration page."
+    },
+    {
+      "name": "Course Clash",
+      "url": "/courseclash",
+      "description": "Check timetable conflicts instantly."
+    },
+    {
+      "name": "Announcements",
+      "url": "/announcement",
+      "description": "Stay updated with latest notifications."
+    }
+  ]
 }

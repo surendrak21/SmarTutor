@@ -51,7 +51,6 @@ const Home = () => {
         </div>
 
         <div className="st-hero__art">
-          {/* simple, fast-loading SVG illustration */}
           <svg viewBox="0 0 400 300" className="st-hero__svg" aria-hidden="true">
             <defs>
               <linearGradient id="g1" x1="0" x2="1">
@@ -74,10 +73,7 @@ const Home = () => {
         </div>
       </section>
 
-     
 
-
-      {/* Team / credits (kept from your page, cleaner layout) */}
       <section className="st-team container">
         <div className="st-section-head">
           <h2>Team&nbsp;16</h2>

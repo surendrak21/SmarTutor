@@ -17,7 +17,7 @@ app.use(cors({
   credentials: true,
 }));
 
-// routes AFTER parsers
+
 app.use(require('./router/auth'));
 app.use(require('./router/prereg'));
 
@@ -29,4 +29,11 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`server is running at port ${PORT}`);
+});
+
+
+app.use(express.static(path.join(__dirname, "client/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build", "index.html"));
 });

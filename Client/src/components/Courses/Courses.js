@@ -1,5 +1,5 @@
 import React ,{useEffect,useState} from 'react';
-import './contact.css'; // Import CSS file for styling
+import './contact.css'; 
 import {useNavigate} from 'react-router-dom';
 
 const Courses = () => {
