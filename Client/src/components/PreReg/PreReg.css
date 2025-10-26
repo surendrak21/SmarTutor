@@ -1,115 +1,412 @@
-/* Uncomment if .flex-container is being used, and adjust as needed. */
-.flex-container {
-  flex-direction: row;
-  height: 100vh;
-  background-color: rgb(241, 198, 175);
-}
- 
+/* ================ GLOBAL WRAPPER ================ */
 
-.calendar tr {
-    background-color: rgb(242, 204, 214);
-    color: aquamarine;
-  }
-  
-  .calendar tr th {
-    background-color: rgb(113, 167, 218);
-    color: rgb(6, 6, 6);
-  }
-  
+body {
+  background: radial-gradient(circle at 20% 20%, #ffffff 0%, #ecebff 40%, #dedcf8 100%);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #1f2937;
+}
+
+/* main page content */
+.prereg-page {
+  max-width: 1800px;          /* wide, dashboard style */
+  margin: 2rem auto 4rem auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
  
-  .course-search {
-    margin-bottom: 20px;
+}
+
+/* loading state */
+.prereg-loading {
+  max-width: 1400px;
+  margin: 4rem auto;
+  padding: 2rem;
+  font-size: 1rem;
+  color: #4b5563;
+  text-align: center;
+  background: #ffffffcc;
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.07),
+    0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+/* a shared "card" style for each section */
+.search-section,
+.selection-section,
+.timetable-section {
+  background-color: #ffffffcc;
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 24px 50px rgba(0, 0, 0, 0.06),
+    0 2px 4px rgba(0, 0, 0, 0.03);
+  padding: 1.5rem 1.5rem 2rem 1.5rem;
+  font-size: large;
+}
+
+/* header text that appears in Selection / Timetable boxes */
+.section-head {
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.4rem;
+  margin: 0;
+}
+
+.section-subtitle {
+  font-size: 1.3rem;
+  color: #6b7280;
+  line-height: 1.2rem;
+  margin-top: 0.25rem;
+}
+
+
+/* ================ SEARCH AREA ================ */
+
+.search-label {
+  font-size: 1.9rem;
+  font-weight: 500;
+  color: #4977b8;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 2000px;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  outline: none;
+  background-color: #fff;
+  transition: all 0.18s ease;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+}
+
+.search-input:focus {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.25);
+}
+
+/* panel that appears with results only when user typed >=2 letters */
+.search-results-panel {
+  max-width: 2000px;
+  margin-top: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid #a5acbc;
+  background-color: #c8d5a2;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.search-empty {
+  font-size: 0.85rem;
+  color: #6b7280;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* each row in the dropdown list */
+.search-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  background-color: #fff;
+  cursor: default;
+  line-height: 1.4rem;
+  font-size: 02.5rem;
+}
+
+.search-row:last-child {
+  border-bottom: none;
+}
+
+.search-row:hover {
+  background-color: #fafafa;
+}
+
+.search-row-info {
+  display: flex;
+  flex-direction: column;
+  max-width: calc(100% - 70px);
+}
+
+/* new flex row that keeps name on left and meta on right */
+.row-top-line {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 02.75rem;
+  width: 100%;
+  /* prevent meta from jumping to next line too early */
+  flex-wrap: nowrap;
+}
+
+/* left side (course name) */
+.row-name {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 1.6rem;         /* <-- fix: "01.5rem" is invalid. Use normal values */
+  line-height: 1.4rem;
+  flex: 1 1 auto;          /* take remaining width */
+  min-width: 0;            /* allows text-overflow to work */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* long course names will truncate nicely */
+}
+
+/* right side (code • branch • credits) */
+.row-meta-inline {
+  font-size: 01.5rem;
+  color: #6b7280;
+  line-height: 1.4rem;
+  flex-shrink: 0;          /* don't let this shrink weirdly */
+  white-space: nowrap;     /* keep it in one piece on the right */
+}
+
+
+/* "Add" button in search rows */
+.row-add-btn {
+  flex-shrink: 0;
+  background-color: #10b981;
+  color: #ffffff;
+  font-size: 01.5rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.6rem;
+  line-height: 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 68px;
+  text-align: center;
+}
+
+.row-add-btn:hover {
+  background-color: #0ea472;
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
+}
+
+
+/* ================ " SELECTION" TABLE ================ */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #ddc8aa;
+  background-color: #f2eeee;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.04),
+    0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.selection-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 900px;
+  font-size: 2.9rem;
+  color: #1f2937;
+}
+
+.selection-table thead tr {
+  background-color: #1d4ed8;
+  color: #fff;
+}
+
+.selection-table th {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: left;
+  color: #354f46;
+  padding: 0.75rem 0.75rem;
+  line-height: 1.2rem;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.selection-table td {
+  font-size: 01.5rem;
+  padding: 0.75rem 0.75rem;
+  vertical-align: top;
+  line-height: 1.3rem;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #fff;
+  font-weight: 400;
+  color: #1f2937;
+}
+
+/* zebra alt rows */
+.selection-table tbody tr:nth-child(even) td {
+  background-color: #f9fafb;
+}
+
+/* empty message row */
+.table-empty-row td {
+  background-color: #fff;
+  border-bottom: none;
+  text-align: center;
+}
+
+.table-empty-msg {
+  font-size: 0.9rem;
+  color: #6b7280;
+  padding: 2rem 1rem;
+  line-height: 1.4rem;
+}
+
+/* "Drop" button */
+.drop-btn {
+  background-color: #dc2626;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.4rem 0.6rem;
+  line-height: 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 44px;
+  text-align: center;
+}
+
+.drop-btn:hover {
+  background-color: #b91c1c;
+  box-shadow: 0 10px 20px rgba(220, 38, 38, 0.4);
+}
+
+
+/* ================ TIMETABLE ================ */
+
+.calendar {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  color: #1f2937;
+  background-color: #f4c3dc;
+}
+
+.calendar thead tr {
+  background-color: #4b5563;
+  color: #ffffff;
+}
+
+.calendar th {
+  font-weight: 500;
+  font-size: 1.5rem;
+  text-align: left;
+  padding: 0.75rem 0.75rem;
+  line-height: 1.2rem;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.calendar th:last-child {
+  border-right: none;
+}
+
+.calendar td {
+  position: relative;
+  text-align: left;
+  padding: 0.75rem 0.75rem;
+  line-height: 1.2rem;
+  min-width: 100px;
+  vertical-align: middle;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  background-color: #fff;
+  font-size: 01.5rem;
+  color: #1f2937;
+  font-weight: 400;
+}
+
+.calendar tr:last-child td {
+  border-bottom: none;
+}
+
+.calendar td:last-child {
+  border-right: none;
+}
+
+/* --- very important: KEEP YOUR LOGIC ---
+   .highlighted = no clash (green)
+   .conflicted = clash (red)
+*/
+
+.highlighted {
+  background-color: #d1fae5 !important;   /* pale mint */
+  color: #065f46 !important;              /* deep green text */
+  font-weight: 600;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px rgba(16, 185, 129, 0.4);
+}
+
+.conflicted {
+  background-color: #fee2e2 !important;   /* pale red */
+  color: #b91c1c !important;              /* deep red text */
+  font-weight: 600;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px rgba(239, 68, 68, 0.4);
+}
+
+
+/* ================ RESPONSIVE ================ */
+
+@media (max-width: 768px) {
+  .prereg-page {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
-  
-  .course-search input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
+
+  .search-input {
+    max-width: 100%;
   }
-  
-  .course-search div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #f9f5f5;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    font-size: 16px;
-    
+
+  .search-results-panel {
+    max-width: 100%;
   }
-  
-  .course-search button {
-    padding: 5px 15px;
-    background-color: #7ed40d;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    
+
+  .table-wrapper {
+    border-radius: 12px;
   }
-  
-  .course-search button:hover {
-    background-color: #0056b3;
-  }
-  
-  .selected-courses table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .selected-courses th, .selected-courses td {
-    text-align: left;
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .selected-courses th {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .selected-courses button {
-    padding: 5px 10px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .selected-courses button:hover {
-    background-color: #c82333;
-  }
-  
+
+  .selection-table,
   .calendar {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
+    min-width: 700px;
+    font-size: 0.8rem;
   }
-  
-  .calendar th, .calendar td {
-    text-align: left;
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
+
+  .selection-table th {
+    font-size: 0.7rem;
   }
-  
+
+  .selection-table td {
+    font-size: 0.8rem;
+  }
+
   .calendar th {
-    background-color: #92a728;
-    color: white;
+    font-size: 0.7rem;
   }
-  .timetable-cell {
-    border: 1px solid #ddd;
-    padding: 5px;
-    text-align: center;
+
+  .calendar td {
+    font-size: 0.75rem;
   }
-  
-  .highlighted {
-    background-color: lightgreen;
-  }
-  .conflicted {
-    background-color: red;
-    color: white; /* Optionally change text color to improve readability */
 }

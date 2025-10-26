@@ -1,0 +1,154 @@
+/* full-screen background */
+
+.auth-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, #f5f3ff 0%, #ece9f9 40%, #ffffff 80%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #1f2937;
+  
+  /* BASE FONT SIZE INCREASED: Saare elements ka size iske relative mein badhega */
+  font-size: 1.05rem; 
+}
+
+
+/* wrapper to control max width */
+.auth-shell {
+  width: 100%;
+  max-width: 620px; /* Thoda zyada width bhi set kar diya for better look */
+  padding: 1rem;
+}
+
+
+/* the actual card */
+.login-card {
+  background: #ffffff;
+  border-radius: 16px;
+  /* HEIGHT INCREASE: Vertical padding badhaya (Top 3rem, Bottom 2.5rem) */
+  padding: 8rem 3rem 5.5rem; 
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+
+/* title */
+.login-title {
+  /* FONT SIZE INCREASED: 1.25rem se 1.5rem kiya */
+  font-size: 3.5rem; 
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+
+/* each label + input group */
+.form-field {
+  /* Margins thode badha diye for more spacing */
+  margin-bottom: 1.25rem; 
+}
+
+
+.form-field label {
+  display: block;
+  /* FONT SIZE INCREASED: 0.8rem se 0.9rem kiya */
+  font-size: 2.3rem; 
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem; /* Thoda bottom margin bhi badhaya */
+}
+
+
+/* inputs */
+.form-field input {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  /* INPUT FONT SIZE INCREASED: 0.9rem se 1rem kiya */
+  font-size: 1.5rem; 
+  line-height: 1.4rem; /* Line height bhi adjust kiya */
+  padding: 0.8rem 0.9rem; /* Input padding badhaya */
+  outline: none;
+  color: #111827;
+  transition: all 0.16s ease;
+}
+
+
+.form-field input::placeholder {
+  color: #9ca3af;
+  font-size: larger;
+}
+
+
+.form-field input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+}
+
+
+/* button */
+.login-btn {
+  width: 100%;
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  /* BUTTON FONT SIZE INCREASED: 0.95rem se 1.05rem kiya, padding bhi badhaya */
+  padding: 0.9rem 1rem; 
+  font-size: 2.05rem; 
+  line-height: 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 16px 30px rgba(124, 58, 237, 0.28);
+  transition: box-shadow 0.16s ease, transform 0.16s ease;
+  margin-top: 1rem; /* Button ka top margin badhaya */
+}
+
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 40px rgba(124, 58, 237, 0.4);
+}
+
+
+/* tiny footer text */
+.login-hint {
+  margin-top: 1.5rem; /* Margin badhaya */
+  text-align: center;
+  /* FONT SIZE INCREASED: 0.8rem se 0.9rem kiya */
+  font-size: 1.9rem; 
+  color: #6b7280;
+}
+
+
+.login-hint a {
+  color: #7c3aed;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+
+.login-hint a:hover {
+  text-decoration: underline;
+}
+
+
+/* responsive tweak: on super small phones just add a bit more padding */
+@media (max-width: 450px) { /* Media query range bhi thoda badhaya */
+  .auth-shell {
+    max-width: 95%;
+  }
+  .login-card {
+    border-radius: 18px;
+    /* Small screen ke liye bhi padding adjust kiya */
+    padding: 2rem 1.5rem 1.5rem; 
+  }
+}

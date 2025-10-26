@@ -2,6 +2,8 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
+import "./Login.css";
+
 
 const Login = () => {
   const { dispatch } = useContext(UserContext);
@@ -39,46 +41,47 @@ const Login = () => {
   };
 
   return (
-    <section>
-      <main>
-        <div className="section-registration">
-          <div className="container grid grid-two-cols">
-            <div className="registration-form">
-              <h1 className="main-heading mb-3">Login form</h1>
-              <br />
-              <form onSubmit={loginUser}>
-                <div>
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="text"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="email"
-                  />
-                </div>
+  <div className="auth-page">
+    <div className="auth-shell">
+      <div className="login-card">
+        <h1 className="login-title">Login</h1>
 
-                <div>
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="password"
-                  />
-                </div>
-                <br />
-                <button type="submit" className="btn btn-submit">
-                  Login
-                </button>
-              </form>
-            </div>
+        <form onSubmit={loginUser}>
+          <div className="form-field">
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@iitk.ac.in"
+            />
           </div>
-        </div>
-      </main>
-    </section>
-  );
+
+          <div className="form-field">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+            />
+          </div>
+
+          <button type="submit" className="login-btn">
+            Sign in
+          </button>
+        </form>
+
+        <p className="login-hint">
+          New user? <a href="/signup">Create account</a>
+        </p>
+      </div>
+    </div>
+  </div>
+);
+
 };
 
 export default Login;

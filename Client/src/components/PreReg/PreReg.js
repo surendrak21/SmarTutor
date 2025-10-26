@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./PreReg.css";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,7 @@ const DAY_LABEL = {
   SN: "Sunday",
 };
 
-
+// build empty timetable grid
 function emptyTimetable() {
   const t = {};
   for (let hour = 7; hour <= 18; hour++) {
@@ -31,8 +31,7 @@ function emptyTimetable() {
   return t;
 }
 
-
-// IMPORTANT: keep Th, SA, SN before single-letter days to avoid T catching "Th"
+// extract day codes from string like "M (L01) Th (L01) 07:00-07:50"
 function parseDays(str) {
   const re = /(Th|SA|SN|M|T|W|F)\b/g;
   const days = [];
@@ -41,7 +40,7 @@ function parseDays(str) {
   return days;
 }
 
-// parse single time range (10:00-10:50 etc.)
+// extract start/end hour/min from "10:00-10:50"
 function parseTimeRange(str) {
   const m = str.match(/(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})/);
   if (!m) return null;
@@ -55,43 +54,58 @@ function parseTimeRange(str) {
 const PreRegistration = () => {
   const navigate = useNavigate();
 
-  const [catalog, setCatalog] = useState([]); // all courses from DB
-  const [courses, setCourses] = useState([]); // user's selected courses (expanded docs)
+  // all courses from DB (catalog)
+  const [catalog, setCatalog] = useState([]);
+  // user's selected courses (full docs)
+  const [courses, setCourses] = useState([]);
+  // search box text
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  // timetable data
   const [timetable, setTimetable] = useState({});
+  // loading state
   const [loading, setLoading] = useState(true);
 
-  // ---------- Auth check + Load catalog + selection ----------
+  // ---------- load auth + catalog + current selection ----------
   useEffect(() => {
     const load = async () => {
       try {
+        // auth check
         const authRes = await fetch("/preregistration", {
           method: "GET",
-          headers: { Accept: "application/json", "Content-Type": "application/json" },
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
           credentials: "include",
         });
         if (!authRes.ok) throw new Error("Unauthorized");
 
+        // catalog
         const catRes = await fetch("/prereg/catalog", {
           method: "GET",
-          headers: { Accept: "application/json", "Content-Type": "application/json" },
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
           credentials: "include",
         });
         if (!catRes.ok) throw new Error("Failed catalog");
         const cat = await catRes.json();
         setCatalog(cat);
 
+        // user's existing selection
         const selRes = await fetch("/prereg/selection", {
           method: "GET",
-          headers: { Accept: "application/json", "Content-Type": "application/json" },
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
           credentials: "include",
         });
         if (!selRes.ok) throw new Error("Failed selection");
         const sel = await selRes.json();
 
         setCourses(sel);
-        setSearchResults(cat);
         setLoading(false);
       } catch (err) {
         console.log("PreReg load error:", err);
@@ -106,24 +120,22 @@ const PreRegistration = () => {
     load();
   }, [navigate]);
 
-  // Search filter (on catalog)
-  useEffect(() => {
-    if (!searchTerm.trim()) {
-      setSearchResults(catalog);
-      return;
-    }
-    const term = searchTerm.toLowerCase();
-    setSearchResults(
-      catalog.filter(
-        (c) =>
-          c.courseName.toLowerCase().includes(term) ||
-          c.courseId.toLowerCase().includes(term) ||
-          c.branch.toLowerCase().includes(term)
-      )
+  // ---------- computed filtered results (shown only when typing) ----------
+  const filteredResults = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+
+    // if user hasn't typed at least 2 chars -> return []
+    if (term.length < 2) return [];
+
+    return catalog.filter(
+      (c) =>
+        c.courseName.toLowerCase().includes(term) ||
+        c.courseId.toLowerCase().includes(term) ||
+        c.branch.toLowerCase().includes(term)
     );
   }, [searchTerm, catalog]);
 
-  // Add to user's selection
+  // ---------- add course to user's prereg list ----------
   const handleAddCourse = async (course) => {
     try {
       const res = await fetch("/prereg/selection", {
@@ -141,13 +153,15 @@ const PreRegistration = () => {
         if (prev.some((c) => c.courseId === course.courseId)) return prev;
         return [...prev, course];
       });
+      // optional: clear search after add
+      setSearchTerm("");
     } catch (e) {
       console.error(e);
       window.alert("Network error");
     }
   };
 
-  // Remove from user's selection
+  // ---------- remove course from user's prereg list ----------
   const handleDelete = async (courseId) => {
     try {
       const res = await fetch(`/prereg/selection/${courseId}`, {
@@ -166,18 +180,18 @@ const PreRegistration = () => {
     }
   };
 
-  // Timetable generation with conflict detection (from selected courses)
+  // ---------- timetable builder ----------
   useEffect(() => {
-    const t = emptyTimetable();
+    const grid = emptyTimetable();
 
     courses.forEach((course) => {
-      const days = parseDays(course.time);            // e.g. ["M","Th"]
-      const range = parseTimeRange(course.time);      // e.g. {startHour:12,endHour:13,...}
+      const days = parseDays(course.time);
+      const range = parseTimeRange(course.time);
       if (!days.length || !range) return;
 
-      const { startHour, startMin, endHour, endMin } = range;
+      const { startHour, endHour, endMin } = range;
 
-      // hour slots to fill (inclusive if endMin>0 so 10:00-10:50 => hour 10 only)
+      // fill per-hour slots (10:00-10:50 => only 10)
       const lastHour = endMin > 0 ? endHour : endHour - 1;
 
       days.forEach((d) => {
@@ -187,114 +201,195 @@ const PreRegistration = () => {
         for (let h = startHour; h <= lastHour; h++) {
           const label =
             h === 12 ? `${h}:00 pm` : h > 12 ? `${h - 12}:00 pm` : `${h}:00 am`;
-          if (!t[label]) continue;
-          t[label][dayLabel].push(course.courseId);
+          if (!grid[label]) continue;
+          grid[label][dayLabel].push(course.courseId);
         }
       });
     });
 
-    // decorate cells
-    Object.keys(t).forEach((time) => {
-      Object.keys(t[time]).forEach((day) => {
-        const arr = t[time][day];
+    // decorate each cell
+    Object.keys(grid).forEach((time) => {
+      Object.keys(grid[time]).forEach((day) => {
+        const arr = grid[time][day];
         if (Array.isArray(arr)) {
-          if (arr.length > 1) t[time][day] = { className: "conflicted", courses: arr.join(", ") };
-          else if (arr.length === 1) t[time][day] = { className: "highlighted", courses: arr[0] };
-          else t[time][day] = { className: "", courses: "" };
+          if (arr.length > 1) {
+            grid[time][day] = {
+              className: "conflicted",
+              courses: arr.join(", "),
+            };
+          } else if (arr.length === 1) {
+            grid[time][day] = {
+              className: "highlighted",
+              courses: arr[0],
+            };
+          } else {
+            grid[time][day] = { className: "", courses: "" };
+          }
         }
       });
     });
 
-    setTimetable(t);
+    setTimetable(grid);
   }, [courses]);
 
-  if (loading) return <div style={{ padding: 16 }}>Loading Pre-Registration…</div>;
+  if (loading) {
+    return (
+      <div className="prereg-loading">
+        Loading Pre-Registration…
+      </div>
+    );
+  }
 
   return (
-    <>
-      {/* Search (Catalog) */}
-      <div className="course-search">
+    <div className="prereg-page">
+      {/* ---------- SEARCH + RESULTS PANEL ---------- */}
+      <section className="search-section">
+        <label className="search-label" htmlFor="courseSearch">
+          Add course
+        </label>
+
         <input
+          id="courseSearch"
+          className="search-input"
           type="text"
-          placeholder="Search courses by name or ID..."
+          placeholder="Search course by name / code (min 2 letters)…"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        {searchResults.map((course) => (
-          <div key={course.courseId} className="search-result">
-            {course.courseName} ({course.courseId})
-            <button onClick={() => handleAddCourse(course)}>Add</button>
+
+        {/* search dropdown / panel (only when user typed enough and results exist) */}
+        {searchTerm.trim().length >= 2 && (
+          <div className="search-results-panel">
+            {filteredResults.length === 0 ? (
+              <div className="search-empty">No matches found</div>
+            ) : (
+              filteredResults.map((course) => (
+                <div
+                  key={course.courseId}
+                  className="search-row"
+                >
+<div className="search-row-info">
+  <div className="row-top-line">
+    <span className="row-name">{course.courseName}</span>
+
+    <span className="row-meta-inline">
+      {course.courseId} • {course.branch} • {course.credits} cr
+    </span>
+  </div>
+</div>
+
+                  <button
+                    className="row-add-btn"
+                    onClick={() => handleAddCourse(course)}
+                  >
+                    Add
+                  </button>
+                </div>
+              ))
+            )}
           </div>
-        ))}
-      </div>
+        )}
+      </section>
 
-      {/* Selected Courses (User) */}
-      <div className="selected-courses">
-        <h2>Selected Courses</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>Branch</th>
-              <th>Course ID</th>
-              <th>Course Name</th>
-              <th>Credits</th>
-              <th>Time Slot</th>
-              <th>Instructor</th>
-              <th>Status</th>
-              <th>Drop</th>
-            </tr>
-          </thead>
-          <tbody>
-            {courses.map((course, index) => (
-              <tr key={course.courseId}>
-                <td>{index + 1}</td>
-                <td>{course.branch}</td>
-                <td>{course.courseId}</td>
-                <td>{course.courseName}</td>
-                <td>{course.credits}</td>
-                <td>{course.time}</td>
-                <td>{course.instructor}</td>
-                <td>{course.status}</td>
-                <td>
-                  <button onClick={() => handleDelete(course.courseId)}>Drop</button>
-                </td>
+      {/* ---------- SELECTED COURSES TABLE ---------- */}
+      <section className="selection-section">
+        <div className="section-head">
+          <h2 className="section-title">Your Selection</h2>
+          <div className="section-subtitle">
+            These will be used for clash check & timetable
+          </div>
+        </div>
+
+        <div className="table-wrapper">
+          <table className="selection-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Branch</th>
+                <th>Course ID</th>
+                <th>Course Name</th>
+                <th>Credits</th>
+                <th>Time Slot</th>
+                <th>Instructor</th>
+                <th>Status</th>
+                <th>Drop</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Timetable */}
-      <div className="content">
-        <table className="calendar">
-          <thead>
-            <tr>
-              <th>Time/Day</th>
-              <th>Monday</th>
-              <th>Tuesday</th>
-              <th>Wednesday</th>
-              <th>Thursday</th>
-              <th>Friday</th>
-              <th>Saturday</th>
-              <th>Sunday</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(timetable).map((time) => (
-              <tr key={time}>
-                <td>{time}</td>
-                {Object.keys(timetable[time]).map((day) => (
-                  <td key={day} className={timetable[time][day].className}>
-                    {timetable[time][day].courses}
+            </thead>
+            <tbody>
+              {courses.map((course, index) => (
+                <tr key={course.courseId}>
+                  <td>{index + 1}</td>
+                  <td>{course.branch}</td>
+                  <td>{course.courseId}</td>
+                  <td>{course.courseName}</td>
+                  <td>{course.credits}</td>
+                  <td>{course.time}</td>
+                  <td>{course.instructor}</td>
+                  <td>{course.status}</td>
+                  <td>
+                    <button
+                      className="drop-btn"
+                      onClick={() => handleDelete(course.courseId)}
+                    >
+                      Drop
+                    </button>
                   </td>
-                ))}
+                </tr>
+              ))}
+              {courses.length === 0 && (
+                <tr className="table-empty-row">
+                  <td colSpan="9" className="table-empty-msg">
+                    No courses added yet. Use search above to add.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* ---------- TIMETABLE GRID ---------- */}
+      <section className="timetable-section">
+        <div className="section-head">
+          <h2 className="section-title">Your Timetable</h2>
+          <div className="section-subtitle">
+            Green = OK, Red = clash
+          </div>
+        </div>
+
+        <div className="table-wrapper">
+          <table className="calendar">
+            <thead>
+              <tr>
+                <th>Time / Day</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </>
+            </thead>
+            <tbody>
+              {Object.keys(timetable).map((time) => (
+                <tr key={time}>
+                  <td>{time}</td>
+                  {Object.keys(timetable[time]).map((day) => (
+                    <td
+                      key={day}
+                      className={timetable[time][day].className}
+                    >
+                      {timetable[time][day].courses}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   );
 };
 
