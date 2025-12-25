@@ -1,33 +1,72 @@
-SmartTutor – Course Pre-Registration Platform
+# 🎓 SmartTutor – Course Pre-Registration Platform
 
-A full-stack web application built with MERN (MongoDB, Express.js, React, Node.js) that simulates IITK’s Pre-Registration Portal. Students can search, add, drop courses, generate a weekly timetable with clash detection, and view announcements.
+SmartTutor is a **full-stack web application** built using the **MERN stack (MongoDB, Express.js, React, Node.js)** that simulates the **IIT Kanpur Pre-Registration Portal**.
 
-Features
+It allows students to **search, add, and drop courses**, automatically **generate a weekly timetable**, **detect time clashes**, and **view announcements** — all through a clean, responsive UI inspired by IITK student portals.
 
-🔐 User Authentication (JWT + Cookies)
+---
 
-📚 Course Management: Add, Drop, and Search courses
+## 🚀 Features
 
-📅 Timetable auto-generation with clash detection (highlight conflicts in red)
+- 🔐 **User Authentication** (JWT + Cookies)
+- 📚 **Course Management**
+  - Search courses
+  - Add / Drop courses
+- 📅 **Automatic Timetable Generation**
+  - Clash detection
+  - 🔴 Red = Clash, 🟢 Green = No Clash
+- 📢 **Announcements Page** with styled cards
+- 🌐 **Full-Stack Integration** (Frontend + Backend + Database)
+- 🎨 **Modern & Responsive UI**
 
-📢 Announcements page with styled cards
+---
 
-🌐 Full-stack integration (Frontend + Backend + Database)
+## 📸 Screenshots
 
-🎨 Responsive and modern UI inspired by IITK student portals
 
-Prerequisites
+### 📝 Registration Page
+![Register Page](images/register.png)
 
-Node.js (v14 or higher)
+### 🔐 Login Page
+![Login Page](images/login.png)
 
-MongoDB (v4.4 or higher)
 
-npm or yarn
+### 📚 Course Pre-Registration
+![PreRegistration Page](images/preregistration.png)
 
-Installation
-1️⃣ Clone the repository
+### 🗓️ Timetable with Clash Detection
+![Timetable Page](images/timetable.png)
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React, CSS
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB
+- **Authentication:** JWT, Cookies
+- **State Management:** React Hooks
+
+---
+
+## ✅ Prerequisites
+
+Make sure you have the following installed:
+
+- Node.js **v14 or higher**
+- MongoDB **v4.4 or higher**
+- npm or yarn
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the Repository
+
+```bash
 git clone https://github.com/surendrak21/SmartTutor.git
 cd SmartTutor
+```
 
 2️⃣ Backend Setup
 cd backend
@@ -53,10 +92,11 @@ npm start
 
 The frontend runs at: http://localhost:3000
 The backend runs at: http://localhost:5000
+---
 
-API Documentation
-1. Authentication
-Signup
+##  API Documentation
+ 1. Authentication
+ Signup
 
 URL: /signup
 
@@ -208,7 +248,9 @@ instructor: String
 
 status: String ("Active" / "Dropped")
 
-Error Handling
+---
+
+## Error Handling
 
 200: Success
 
@@ -227,37 +269,5 @@ Example error response:
 {
   "error": "Invalid credentials"
 }
-
-Project Structure
-SmartTutor/
-├── backend/
-│   ├── db/
-│   ├── model/        # User, Course schemas
-│   ├── router/       # auth.js
-│   ├── middleware/   # authenticate.js
-│   └── app.js
-├── Client/
-│   ├── src/components/
-│   │   ├── PreRegistration.js
-│   │   ├── Announcement.js
-│   │   ├── Courses.js
-│   │   └── Auth/
-│   └── App.js
-└── README.md
-
-Contributing
-
-Fork the repository
-
-Create your feature branch (git checkout -b feature/YourFeature)
-
-Commit your changes (git commit -m 'Add new feature')
-
-Push to the branch (git push origin feature/YourFeature)
-
-Create a Pull Request
-
-License
-
-This project is licensed under the MIT License.
+---
 
